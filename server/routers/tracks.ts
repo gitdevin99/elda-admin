@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { router, publicProcedure } from '../trpc';
+import { router, publicProcedure } from '../init';
 
 const ENDPOINT = process.env.EXPO_PUBLIC_RORK_DB_ENDPOINT;
 const NAMESPACE = process.env.EXPO_PUBLIC_RORK_DB_NAMESPACE;

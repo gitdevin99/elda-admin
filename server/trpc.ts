@@ -1,10 +1,5 @@
-import { initTRPC } from '@trpc/server';
+import { router } from './init';
 import { tracksRouter } from './routers/tracks';
-
-const t = initTRPC.create();
-
-export const router = t.router;
-export const publicProcedure = t.procedure;
 
 export const appRouter = router({
   tracks: tracksRouter,
