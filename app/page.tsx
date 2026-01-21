@@ -199,10 +199,10 @@ export default function AdminPanelScreen() {
                   <button
                     key={range}
                     type="button"
-                    className={`px-5 py-3 rounded-[10px] border text-sm font-semibold whitespace-nowrap ${
+                    className={`px-5 py-3 rounded-xl border-2 text-sm font-bold whitespace-nowrap transition-all ${
                       formData.frequencyRange === range
-                        ? 'bg-cyan border-cyan text-black'
-                        : 'bg-[#111] border-white/10 text-white/60'
+                        ? 'bg-[#00F0FF] border-[#00F0FF] text-black'
+                        : 'bg-[#1a1a1a] border-white/20 text-white hover:border-cyan/50'
                     }`}
                     onClick={() => setFormData({ ...formData, frequencyRange: range })}
                   >
@@ -219,10 +219,10 @@ export default function AdminPanelScreen() {
                   <button
                     key={intensity}
                     type="button"
-                    className={`px-5 py-3 rounded-[10px] border text-sm font-semibold whitespace-nowrap ${
+                    className={`px-5 py-3 rounded-xl border-2 text-sm font-bold whitespace-nowrap transition-all ${
                       formData.signalIntensity === intensity
-                        ? 'bg-cyan border-cyan text-black'
-                        : 'bg-[#111] border-white/10 text-white/60'
+                        ? 'bg-[#00F0FF] border-[#00F0FF] text-black'
+                        : 'bg-[#1a1a1a] border-white/20 text-white hover:border-cyan/50'
                     }`}
                     onClick={() => setFormData({ ...formData, signalIntensity: intensity })}
                   >
@@ -239,10 +239,10 @@ export default function AdminPanelScreen() {
                   <button
                     key={mode}
                     type="button"
-                    className={`px-5 py-3 rounded-[10px] border text-sm font-semibold whitespace-nowrap ${
+                    className={`px-5 py-3 rounded-xl border-2 text-sm font-bold whitespace-nowrap transition-all ${
                       formData.beatMode === mode
-                        ? 'bg-cyan border-cyan text-black'
-                        : 'bg-[#111] border-white/10 text-white/60'
+                        ? 'bg-[#00F0FF] border-[#00F0FF] text-black'
+                        : 'bg-[#1a1a1a] border-white/20 text-white hover:border-cyan/50'
                     }`}
                     onClick={() => setFormData({ ...formData, beatMode: mode })}
                   >
@@ -276,10 +276,10 @@ export default function AdminPanelScreen() {
                   <button
                     key={cat}
                     type="button"
-                    className={`px-5 py-3 rounded-[10px] border text-sm font-semibold whitespace-nowrap ${
+                    className={`px-5 py-3 rounded-xl border-2 text-sm font-bold whitespace-nowrap transition-all ${
                       formData.categoryType === cat
-                        ? 'bg-cyan border-cyan text-black'
-                        : 'bg-[#111] border-white/10 text-white/60'
+                        ? 'bg-[#00F0FF] border-[#00F0FF] text-black'
+                        : 'bg-[#1a1a1a] border-white/20 text-white hover:border-cyan/50'
                     }`}
                     onClick={() => setFormData({ ...formData, categoryType: cat, subcategoryId: '' })}
                   >
