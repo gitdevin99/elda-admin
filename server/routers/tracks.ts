@@ -5,6 +5,15 @@ const ENDPOINT = process.env.RORK_DB_ENDPOINT;
 const NAMESPACE = process.env.RORK_DB_NAMESPACE;
 const TOKEN = process.env.RORK_DB_TOKEN;
 
+// Validate environment variables
+if (!ENDPOINT || !NAMESPACE || !TOKEN) {
+  console.error('Missing Rivet KV environment variables:', {
+    ENDPOINT: !!ENDPOINT,
+    NAMESPACE: !!NAMESPACE,
+    TOKEN: !!TOKEN,
+  });
+}
+
 const trackSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -24,23 +33,39 @@ const trackSchema = z.object({
 });
 
 async function fetchSubcategoriesFromDb() {
-  const url = `${ENDPOINT}/v1/kv/namespaces/${NAMESPACE}/keys/subcategories`;
-
-  const response = await fetch(url, {
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-    },
-  });
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      return [];
-    }
-    throw new Error(`Failed to fetch subcategories: ${response.status}`);
+  if (!ENDPOINT || !NAMESPACE || !TOKEN) {
+    throw new Error('Rivet KV database credentials are not configured. Please set RORK_DB_ENDPOINT, RORK_DB_NAMESPACE, and RORK_DB_TOKEN environment variables.');
   }
 
-  const result = await response.json();
-  return result.value?.data || [];
+  const url = `${ENDPOINT}/v1/kv/namespaces/${NAMESPACE}/keys/subcategories`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${TOKEN}`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.log('Subcategories key not found in database, returning empty array');
+        return [];
+      }
+      const errorText = await response.text();
+      console.error('Rivet KV fetch error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+      });
+      throw new Error(`Failed to fetch subcategories: ${response.status} ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    return result.value?.data || [];
+  } catch (error) {
+    console.error('Error fetching subcategories from Rivet KV:', error);
+    throw error;
+  }
 }
 
 async function saveSubcategoriesToDb(subcategories: any[]) {
