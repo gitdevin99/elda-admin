@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../init';
 
-const ENDPOINT = process.env.EXPO_PUBLIC_RORK_DB_ENDPOINT;
-const NAMESPACE = process.env.EXPO_PUBLIC_RORK_DB_NAMESPACE;
-const TOKEN = process.env.EXPO_PUBLIC_RORK_DB_TOKEN;
+const ENDPOINT = process.env.RORK_DB_ENDPOINT;
+const NAMESPACE = process.env.RORK_DB_NAMESPACE;
+const TOKEN = process.env.RORK_DB_TOKEN;
 
 const trackSchema = z.object({
   id: z.string(),
@@ -25,7 +25,7 @@ const trackSchema = z.object({
 
 async function fetchSubcategoriesFromDb() {
   const url = `${ENDPOINT}/v1/kv/namespaces/${NAMESPACE}/keys/subcategories`;
-  
+
   const response = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${TOKEN}`,
@@ -75,14 +75,14 @@ export const tracksRouter = router({
     }))
     .mutation(async ({ input }) => {
       const subcategories = await fetchSubcategoriesFromDb();
-      
+
       const updatedSubcategories = subcategories.map((sub: any) => {
         if (sub.id === input.subcategoryId) {
           const trackExists = sub.tracks.some((t: any) => t.id === input.track.id);
           if (trackExists) {
             return {
               ...sub,
-              tracks: sub.tracks.map((t: any) => 
+              tracks: sub.tracks.map((t: any) =>
                 t.id === input.track.id ? input.track : t
               ),
             };
@@ -96,7 +96,7 @@ export const tracksRouter = router({
       });
 
       await saveSubcategoriesToDb(updatedSubcategories);
-      
+
       return { success: true, track: input.track };
     }),
 
@@ -108,12 +108,12 @@ export const tracksRouter = router({
     }))
     .mutation(async ({ input }) => {
       const subcategories = await fetchSubcategoriesFromDb();
-      
+
       const updatedSubcategories = subcategories.map((sub: any) => {
         if (sub.id === input.subcategoryId) {
           return {
             ...sub,
-            tracks: sub.tracks.map((t: any) => 
+            tracks: sub.tracks.map((t: any) =>
               t.id === input.trackId ? { ...t, ...input.track, updatedAt: new Date().toISOString() } : t
             ),
           };
@@ -122,7 +122,7 @@ export const tracksRouter = router({
       });
 
       await saveSubcategoriesToDb(updatedSubcategories);
-      
+
       return { success: true };
     }),
 
@@ -133,7 +133,7 @@ export const tracksRouter = router({
     }))
     .mutation(async ({ input }) => {
       const subcategories = await fetchSubcategoriesFromDb();
-      
+
       const updatedSubcategories = subcategories.map((sub: any) => {
         if (sub.id === input.subcategoryId) {
           return {
@@ -145,15 +145,15 @@ export const tracksRouter = router({
       });
 
       await saveSubcategoriesToDb(updatedSubcategories);
-      
+
       return { success: true };
     }),
 
   getAllTracks: publicProcedure
     .query(async () => {
       const subcategories = await fetchSubcategoriesFromDb();
-      
-      const allTracks = subcategories.flatMap((sub: any) => 
+
+      const allTracks = subcategories.flatMap((sub: any) =>
         sub.tracks.map((track: any) => ({
           ...track,
           subcategoryId: sub.id,
